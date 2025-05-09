@@ -31,11 +31,10 @@ export class LanguageServiceHost implements tsTypes.LanguageServiceHost
 	{
 		fileName = normalize(fileName);
 
-		const originalSnapshot = this.snapshots[fileName];
-
-		if (originalSnapshot && originalSnapshot.getText(0, originalSnapshot.getLength()) === source) {
-			return originalSnapshot;
-		}
+		// don't update the snapshot if there are no changes
+		const prevSnapshot = this.snapshots[fileName];
+		if (prevSnapshot?.getText(0, prevSnapshot.getLength()) === source)
+			return prevSnapshot;
 
 		const snapshot = tsModule.ScriptSnapshot.fromString(source);
 		this.snapshots[fileName] = snapshot;
