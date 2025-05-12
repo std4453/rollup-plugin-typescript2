@@ -11,7 +11,7 @@ export class LanguageServiceHost implements tsTypes.LanguageServiceHost
 	private service?: tsTypes.LanguageService;
 	private fileNames: Set<string>;
 
-	constructor(private parsedConfig: tsTypes.ParsedCommandLine, private transformers: TransformerFactoryCreator[], private cwd: string)
+	constructor(private parsedConfig: tsTypes.ParsedCommandLine, private transformers: TransformerFactoryCreator[], private cwd: string, private filter: (id: string | unknown) => boolean)
 	{
 		this.fileNames = new Set(parsedConfig.fileNames);
 	}
@@ -39,6 +39,9 @@ export class LanguageServiceHost implements tsTypes.LanguageServiceHost
 		const snapshot = tsModule.ScriptSnapshot.fromString(source);
 		this.snapshots[fileName] = snapshot;
 		this.versions[fileName] = (this.versions[fileName] || 0) + 1;
+
+		if (this.filter(fileName))
+			this.fileNames.add(fileName);
 
 		return snapshot;
 	}

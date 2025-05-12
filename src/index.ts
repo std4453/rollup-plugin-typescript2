@@ -174,7 +174,7 @@ const typescript: PluginImpl<RPT2Options> = (options) =>
 
 			filter = createFilter(context, pluginOptions, parsedConfig);
 
-			servicesHost = new LanguageServiceHost(parsedConfig, pluginOptions.transformers, pluginOptions.cwd);
+			servicesHost = new LanguageServiceHost(parsedConfig, pluginOptions.transformers, pluginOptions.cwd, filter);
 			service = tsModule.createLanguageService(servicesHost, documentRegistry);
 			servicesHost.setLanguageService(service);
 
