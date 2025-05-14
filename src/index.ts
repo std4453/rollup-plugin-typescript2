@@ -245,7 +245,8 @@ const typescript: PluginImpl<RPT2Options> = (options) =>
 			if (!filter(id))
 				return undefined;
 
-			const snapshot = servicesHost.setSnapshot(id, code);
+			// force version update under watch mode to ensure recompile
+			const snapshot = servicesHost.setSnapshot(id, code, watchMode);
 
 			// getting compiled file from cache or from ts
 			const result = cache.getCompiled(id, snapshot, () =>
